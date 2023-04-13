@@ -1,0 +1,45 @@
+
+/* *****Main section ***** */
+.main-heading{
+    text-align: center;
+}
+.random-img-holder{
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+iframe{
+    width: 90vw;
+    height: 45vh;
+}
+.heading{
+    list-style: none;
+}
+#food-points{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    font-size: x-large;
+    font-weight: bold;
+}
+.font-color{
+    color: black;
+}
+
+
+#searched-recipe-display{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+#fav-recipe-list{
+    list-style: none;
+    padding: initial;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+#fav-recipe-list li{
+    margin-bottom: inherit;
+}
