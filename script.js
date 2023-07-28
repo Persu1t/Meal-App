@@ -194,7 +194,6 @@ function addRecipeToFavorite(card, cardId) {
     return JSON.stringify(favoriteCopy) === JSON.stringify(newRecipeCopy);
   });
   if (isDuplicate) {
-    alert('This recipe already exists in favorites!');
     return;
   }
 
@@ -203,7 +202,6 @@ function addRecipeToFavorite(card, cardId) {
     ...newRecipes
   }
   favorites.push(newRecipeWithId)
-  alert("This recipe is added to favorites!");
   localStorage.setItem("favorites", JSON.stringify(favorites));
   displayRecipesFromLocal()
 }
