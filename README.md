@@ -7,23 +7,31 @@ The "Cookpad" is a web application that allows users to explore and discover a w
 ## Features
 
 Displaying Random Food Recipe: The application fetches and displays a random food recipe on page load.
-Searching for Specific Recipes: Users can search for recipes using the search bar.
-Adding Recipes to Favorites: Users can add their favorite recipes to the favorites list, stored in local storage.
-Removing Recipes from Favorites: Users can remove recipes from the favorites list.
-How to Use
 
-## Clone the repository to your local machine.
-git clone 
+Searching for Specific Recipes: Users can search for recipes using the search bar.
+
+Adding Recipes to Favorites: Users can add their favorite recipes to the favorites list, stored in local storage.
+
+Removing Recipes from Favorites: Users can remove recipes from the favorites list.
+
+## How to Use
+
+**Clone the repository to your local machine.**
+git clone https://github.com/Persu1t/Meal-App.git
+
 Open the index.html file in your web browser.
+
 Upon loading, a random food recipe will be displayed.
+
 Use the search bar to find specific recipes by entering a search term and clicking the search button.
+
 To add a recipe to favorites, click the "Add to favorite" button on the recipe card.
+
 To remove a recipe from favorites, click the "Remove recipe" button on the favorite recipe card.
 
 ## Dependencies
 
 No external dependencies are required for this project.
-License
 
 ## Author
 Rishabh Shukla
