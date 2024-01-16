@@ -1,5 +1,6 @@
 # Meal-App
 Project live link : https://cookpad.rishabhshukla13.repl.co
+[Github link](https://github.com/Persu1t/Meal-App)
 
 ## Cookpad
 The "Cookpad" is a web application that allows users to explore and discover a wide variety of food recipes. With a vast collection of recipes from different cuisines and categories, users can find new and exciting dishes to cook and enjoy. The application makes use of the "themealdb.com" API to fetch recipe details, including titles, images, videos, ingredients, instructions, and additional information.
