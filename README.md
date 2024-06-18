@@ -1,5 +1,5 @@
 # Meal-App
-Project live link : https://c297e57f-a3c3-4c7f-9220-506dc98fa6b7-00-3dkbpb1guv18m.sisko.replit.dev/
+Project live link : [Cookpad](https://cookerpad.netlify.app)
 
 
 ## Cookpad
