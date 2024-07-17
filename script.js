@@ -13,11 +13,12 @@ let foodInstructions = document.querySelector('#instructions')
 let toggleBtn = document.querySelector('#toggle-btn')
 let searchedRecipeDisplay = document.querySelector('#searched-recipe-display')
 let favRecipeDisplay = document.querySelector('#fav-recipe-list')
+let addCommentbutton = document.querySelector('#add-comment-button')
 
 // Adding the event listener to the window when DOM content loads
 window.addEventListener('DOMContentLoaded', (event) => {
-    fetchRandomFood()
-    displayRecipesFromLocal()
+  fetchRandomFood()
+  displayRecipesFromLocal()
 })
 
 // Adding the event listener to the model of random food api i.e " Add to favorite button"
@@ -26,36 +27,36 @@ randomFoodFavoriteBtn.addEventListener('click', (event) => {
 })
 
 // Fetching the food from random food api
-function fetchRandomFood (){
-   let randomMeal =  fetch("https://www.themealdb.com/api/json/v1/1/random.php")
-   randomMeal.then((response)=>{
+function fetchRandomFood() {
+  let randomMeal = fetch("https://www.themealdb.com/api/json/v1/1/random.php")
+  randomMeal.then((response) => {
     return response.json()
-   }).then((data)=>{
+  }).then((data) => {
     displayFoodDetails(data)
-   }).catch((error)=>{
+  }).catch((error) => {
     console.log(error)
-   })
+  })
 }
 
 // Displaying the food from the random food api
-function displayFoodDetails (data) {
+function displayFoodDetails(data) {
   randomImageHolder.style.backgroundImage = `url("${data.meals[0].strMealThumb}")`
-    recipeTitle.innerHTML = data.meals[0].strMeal
-    toggleBtn.innerHTML = data.meals[0].strMeal
-    const videoUrl = `https://www.youtube.com/embed/${data.meals[0].strYoutube.slice(-11)}`
-    recipeVideo.setAttribute("src", videoUrl)
-    foodCategory.innerHTML = data.meals[0].strCategory
-    foodCountry.innerHTML = data.meals[0].strArea
-    for(let i=1; i<= 20; i++){
-        let li = document.createElement('li')
-        if(data.meals[0][`strIngredient${i}`]){
-            
-            li.setAttribute("class", "font-color")
-            li.innerHTML =`${data.meals[0][`strIngredient${i}`]}, -${data.meals[0][`strMeasure${i}`]}`
-            ingredientsList.appendChild(li)
-        }
+  recipeTitle.innerHTML = data.meals[0].strMeal
+  toggleBtn.innerHTML = data.meals[0].strMeal
+  const videoUrl = `https://www.youtube.com/embed/${data.meals[0].strYoutube.slice(-11)}`
+  recipeVideo.setAttribute("src", videoUrl)
+  foodCategory.innerHTML = data.meals[0].strCategory
+  foodCountry.innerHTML = data.meals[0].strArea
+  for (let i = 1; i <= 20; i++) {
+    let li = document.createElement('li')
+    if (data.meals[0][`strIngredient${i}`]) {
+
+      li.setAttribute("class", "font-color")
+      li.innerHTML = `${data.meals[0][`strIngredient${i}`]}, -${data.meals[0][`strMeasure${i}`]}`
+      ingredientsList.appendChild(li)
     }
-    foodInstructions.innerHTML = data.meals[0].strInstructions
+  }
+  foodInstructions.innerHTML = data.meals[0].strInstructions
 
 }
 
@@ -63,108 +64,151 @@ function displayFoodDetails (data) {
 serachBtn.addEventListener("click", fetchInputValue)
 
 // Function that is added on the search button
-function fetchInputValue(e){
-    e.preventDefault()
-    let searchedValue = searchBarValue.value
-    console.log(searchedValue)
-    fetchSearchedFood(searchedValue)
+function fetchInputValue(e) {
+  e.preventDefault()
+  let searchedValue = searchBarValue.value
+  console.log(searchedValue)
+  fetchSearchedFood(searchedValue)
 }
 
 // Fetching the food from the api that was ritten in the search box 
 function fetchSearchedFood(searchedValue) {
-    let searchedMeal = fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchedValue}`)
-    searchedMeal.then((response )=>{
-        return response.json()
-    } ).then((value)=>{
-        if(value.meals == null){
-            alert('This meal is not available :(')
-        }
-        console.log(value)
-        displayAllSearchedFood(value)
-    }).catch((error)=>{
-        console.log( error)
-    });
+  let searchedMeal = fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchedValue}`)
+  searchedMeal.then((response) => {
+    return response.json()
+  }).then((value) => {
+    if (value.meals == null) {
+      alert('This meal is not available :(')
+    }
+    console.log(value)
+    displayAllSearchedFood(value)
+  }).catch((error) => {
+    console.log(error)
+  });
 }
 
 // Displaying all the food that has been fetched from the food searching api.
-function displayAllSearchedFood(value){
-    searchedRecipeDisplay.innerHTML= ""
-    value.meals.forEach(meal =>{
-        let div = document.createElement('div')
-        let ingredientsArray = []
-        for(let i=0; i<=20; i++){
-            if(meal[`strIngredient${i}`]){
-                ingredientsArray.push(`${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`)
-            }
-        }
-        let ingredientsHtml = ingredientsArray.map((ing) => `<li class="font-color">${ing}</li>`).join("")
-        div.innerHTML = `<div class="card" style="width: 18rem;" id="${meal.idMeal}">
-        <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">${meal.strMeal}</h5>
-          <button type="button" class="btn btn-primary add-to-favorite">Add to favorite</button>
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-${meal.idMeal}"
-          id="toggle-btn">
-          Know more about this
-        </button>
-        <div class="modal fade" id="staticBackdrop-${meal.idMeal}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-          <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: black;">${meal.strMeal}</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+function displayAllSearchedFood(value) {
+  searchedRecipeDisplay.innerHTML = "";
+  value.meals.forEach(meal => {
+      let div = document.createElement('div');
+      let ingredientsArray = [];
+      for (let i = 1; i <= 20; i++) {  // Start loop from 1 as there is no `strIngredient0`
+          if (meal[`strIngredient${i}`]) {
+              ingredientsArray.push(`${meal[`strIngredient${i}`]} - ${meal[`strMeasure${i}`]}`);
+          }
+      }
+      let ingredientsHtml = ingredientsArray.map((ing) => `<li class="font-color">${ing}</li>`).join("");
+      div.innerHTML = `<div class="card" style="width: 18rem;" id="${meal.idMeal}">
+      <img src="${meal.strMealThumb}" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 class="card-title">${meal.strMeal}</h5>
+        <button type="button" class="btn btn-primary add-to-favorite">Add to favorite</button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-${meal.idMeal}"
+        id="toggle-btn" onclick="loadComments(${meal.idMeal})">
+        Know more about this
+      </button>
+      <div class="modal fade" id="staticBackdrop-${meal.idMeal}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="staticBackdropLabel" style="color: black;">${meal.strMeal}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-body-img"><iframe src="https://www.youtube.com/embed/${meal.strYoutube.match(/(?<=v=)[\w-]+/)}" class="recipe-video"></iframe></div>
+              <div class="modal-small-headings">
+                <ul id="food-points">
+                  <li id="category-food-${meal.idMeal}" class="font-color">${meal.strCategory}</li>
+                  <li id="food-country-${meal.idMeal}" class="font-color">${meal.strArea}</li>
+                </ul>
               </div>
-              <div class="modal-body">
-                <div class="modal-body-img"><iframe src="https://www.youtube.com/embed/${meal.strYoutube.match(/(?<=v=)[\w-]+/)}" class="recipe-video"></iframe></div>
-                <div class="modal-small-headings">
-                  <ul id="food-points">
-                    <li id="category-food-${meal.idMeal}" class="font-color">${meal.strCategory}</li>
-                    <li id="food-country-${meal.idMeal}" class="font-color">${meal.strArea}</li>
-                  </ul>
-                </div>
-                <div class="modal-secondry-points">
-                  <ul id="ing-heading">
-                    <li class="font-color">Ingredients</li>
-                  </ul>
-                  <ul id="ing-list-${meal.idMeal}">
-                    ${ingredientsHtml}
-                  </ul>
-                </div>
-                <div class="modal-para">
-                  <p id="instructions-${meal.idMeal}" class="font-color">
-                  ${meal.strInstructions}
-                  </p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+              <div class="modal-secondry-points">
+                <ul id="ing-heading">
+                  <li class="font-color">Ingredients</li>
+                </ul>
+                <ul id="ing-list-${meal.idMeal}">
+                  ${ingredientsHtml}
+                </ul>
+              </div>
+              <div class="modal-para">
+                <p id="instructions-${meal.idMeal}" class="font-color">
+                ${meal.strInstructions}
+                </p>
+              </div>
+              <div class="comments-section" id="comments-section-${meal.idMeal}">
+                <h5>Comments</h5>
+                <ul id="comments-list-${meal.idMeal}"></ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+               <form class="d-flex add-comment-form" role="search" id="add-comment-form-${meal.idMeal}">
+        <input class="form-control me-2 comment-input" type="search" placeholder="Add a comment" aria-label="Add a comment" />
+        <button class="btn btn-outline-success add-comment-button" type="submit">
+          Add Comment
+        </button>
+      </form>
               </div>
             </div>
           </div>
-
         </div>
-        </div>
-      </div>`
-      searchedRecipeDisplay.appendChild(div)
-      })
-      //  Adding event listener to the "Add to favorite " button
-      document.addEventListener('click', function(event) {
-        if (event.target.matches('.add-to-favorite')) {
-        //  Here this line of code is making deep copy of the card that was created in the  displayAllSearchedFood(value) function
-          let card = event.target.closest('.card').cloneNode(true);
-          let cardId = event.target.closest('.card').getAttribute('id')
-          addRecipeToFavorite(card, cardId)
-          console.log('Add to favorite button clicked!');
-        }
-      })
+      </div>
+      </div>
+    </div>`
+      searchedRecipeDisplay.appendChild(div);
 
+      // Add event listener for comment submission
+      document.getElementById(`add-comment-form-${meal.idMeal}`).addEventListener('submit', function(event) {
+          event.preventDefault();
+          const commentInput = this.querySelector('.comment-input');
+          const comment = commentInput.value;
+          if (comment) {
+              addComment(meal.idMeal, comment);
+              commentInput.value = ""; // Clear the input field
+          }
+      });
+  });
+}
+
+// Function to add and display comments
+function addComment(mealId, comment) {
+  let comments = JSON.parse(localStorage.getItem("comments")) || {};
+
+  if (!comments[mealId]) {
+      comments[mealId] = [];
+  }
+
+  comments[mealId].push(comment);
+
+  localStorage.setItem("comments", JSON.stringify(comments));
+
+  const commentsList = document.getElementById(`comments-list-${mealId}`);
+  const commentItem = document.createElement('li');
+  commentItem.textContent = comment;
+  commentsList.appendChild(commentItem);
+}
+
+// Function to load comments when the modal is opened
+function loadComments(mealId) {
+  const commentsList = document.getElementById(`comments-list-${mealId}`);
+  commentsList.innerHTML = "";  // Clear existing comments
+
+  let comments = JSON.parse(localStorage.getItem("comments")) || {};
+
+  if (comments[mealId]) {
+      comments[mealId].forEach(comment => {
+          const commentItem = document.createElement('li');
+          commentItem.textContent = comment;
+          commentsList.appendChild(commentItem);
+      });
+  }
 }
 
 // This function adds the food  to a array which is saved in the local storage
 function addRecipeToFavorite(card, cardId) {
-  const favorites = localStorage.getItem("favorites") 
-    ? JSON.parse(localStorage.getItem("favorites")) 
+  const favorites = localStorage.getItem("favorites")
+    ? JSON.parse(localStorage.getItem("favorites"))
     : [];  // --> this line inisialzes an empty array if nothing  found
   let cardVideoUrl = card.querySelector('.recipe-video').src
   let cardRecipeName = card.querySelector('.card-title').innerText
@@ -173,17 +217,17 @@ function addRecipeToFavorite(card, cardId) {
   let instructionsOfRecipe = card.querySelector(`#instructions-${cardId}`).innerText
 
   let ingredientsList = []
-  card.querySelectorAll(`#ing-list-${cardId} li`).forEach((li)=>{
+  card.querySelectorAll(`#ing-list-${cardId} li`).forEach((li) => {
     ingredientsList.push(li.innerText)
   })
 
   let newRecipes = {
-  recipeVideoUrl : cardVideoUrl,
-  recipeName: cardRecipeName,
-  recipeCategory: cardRecipeCategory,
-  recipeCountry: cardRecipeCountry,
-  recipeInstructions: instructionsOfRecipe,
-  recipeIngredients: ingredientsList
+    recipeVideoUrl: cardVideoUrl,
+    recipeName: cardRecipeName,
+    recipeCategory: cardRecipeCategory,
+    recipeCountry: cardRecipeCountry,
+    recipeInstructions: instructionsOfRecipe,
+    recipeIngredients: ingredientsList
   }
 
   const isDuplicate = favorites.some(favorite => {
@@ -207,7 +251,7 @@ function addRecipeToFavorite(card, cardId) {
 }
 
 // This function fetches the recipe object from the array and display it at favorite sections. 
-function displayRecipesFromLocal(){
+function displayRecipesFromLocal() {
   favRecipeDisplay.innerHTML = ""
   const favorites = JSON.parse(localStorage.getItem("favorites"))
   console.log("favorites from localStorage:", favorites);
@@ -261,15 +305,15 @@ function displayRecipesFromLocal(){
           </div>
         </div>
       </div>`
-        favRecipeDisplay.append(li)
+      favRecipeDisplay.append(li)
     })
-  }else{
+  } else {
     favRecipeDisplay.innerHTML = "<h2>You have no favorite food :(</h2>"
   }
 
   // Adding the event listener to the Remove recipe button
-  favRecipeDisplay.addEventListener('click', (e)=>{
-    if(e.target.classList.contains('remove-recipe')){
+  favRecipeDisplay.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-recipe')) {
       const id = parseInt(e.target.dataset.index)
       console.log(id)
       removeRecipe(id)
@@ -279,7 +323,7 @@ function displayRecipesFromLocal(){
 }
 
 // Remove the recipe  object from the array that is in local storage and update the DOM  to display the recipe
-function removeRecipe(id){
+function removeRecipe(id) {
   const favorites = JSON.parse(localStorage.getItem("favorites"));
   const index = favorites.findIndex(recipe => recipe.id === id); // Find index based on id
   if (index !== -1) {
